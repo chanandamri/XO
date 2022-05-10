@@ -1,0 +1,9 @@
+#board{
+    
+
+}
+.cellClass{
+    border-radius: 5px;
+    border: 1px solid black;
+    /* background-image: url("letter.png"); */
+}
