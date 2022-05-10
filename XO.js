@@ -21,8 +21,8 @@ function addPicToCell(cell, location) {
         cell.classList.add("classX")
         boardArr[location[0]][location[1]] = 'x'
     } else {
-        cell.classList.add("classY")
-        boardArr[location[0]][location[1]] = 'y'
+        cell.classList.add("classO")
+        boardArr[location[0]][location[1]] = 'o'
     }
 }
 function clicked(e) {
