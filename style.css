@@ -1,10 +1,19 @@
 #board{
     display: grid;
-    gap: 55px;
+    gap: 1px;
     grid-template-columns: 1fr 1fr 1fr 
 }
 .cellClass{
     border-radius: 5px;
     border: 1px solid black;
+    width: 40px;
+    height: 40px;
+
     /* background-image: url("letter.png"); */
 }
+/* .classX{
+   image: url('https://upload.wikimedia.org/wikipedia/commons/a/a2/X_mark.svg')
+}
+.classY{
+    https://upload.wikimedia.org/wikipedia/commons/2/2d/O-Jolle_insigna.png'
+} */
