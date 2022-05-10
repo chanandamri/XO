@@ -16,13 +16,21 @@ function getIDFromElemnt(cell) {
 function cellEmpty(location) {
     return boardArr[location[0]][location[1]] == ""
 }
+function addPicToCell(cell, location) {
+    if (player == 'x') {
+        cell.classList.add("classX")
+        boardArr[location[0]][location[1]] = 'x'
+    } else {
+        cell.classList.add("classY")
+        boardArr[location[0]][location[1]] = 'y'
+    }
+}
 function clicked(e) {
     let location = getIDFromElemnt(e.target)
     if (cellEmpty(location)) {
-        console.log("cell empty");
-        boardArr[location[0]][location[1]] = player == 'x' ? 'x' : 'y'
-        player = player == 'x' ? 'y' : 'x'
-        console.log(player);
+        addPicToCell(e.target, location)
+        player = player == 'x' ? 'o' : 'x'
+        console.log(boardArr);
     }
 }
 for (i in boardArr) {
