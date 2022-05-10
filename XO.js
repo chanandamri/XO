@@ -10,9 +10,20 @@ function creatBoard(index) {
     return elem
 
 }
-
+function getIDFromElemnt(cell) {
+    return [cell.id[0], cell.id[1]]
+}
+function cellEmpty(location) {
+    return boardArr[location[0]][location[1]] == ""
+}
 function clicked(e) {
-    console.log(e.target);
+    let location = getIDFromElemnt(e.target)
+    if (cellEmpty(location)) {
+        console.log("cell empty");
+        boardArr[location[0]][location[1]] = player == 'x' ? 'x' : 'y'
+        player = player == 'x' ? 'y' : 'x'
+        console.log(player);
+    }
 }
 for (i in boardArr) {
     for (j in boardArr[i]) {
