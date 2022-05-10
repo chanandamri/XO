@@ -8,12 +8,15 @@
     border: 1px solid black;
     width: 40px;
     height: 40px;
-
-    /* background-image: url("letter.png"); */
+    /* https://upload.wikimedia.org/wikipedia/commons/a/aa/Emblem-question-yellow.svg */
+    background-image: url("question.png");
+    background-image: url("question.png");
 }
-/* .classX{
-   image: url('https://upload.wikimedia.org/wikipedia/commons/a/a2/X_mark.svg')
+.classX{
+    background-image: url("question.png");
+  /* 'https://upload.wikimedia.org/wikipedia/commons/a/a2/X_mark.svg' */
 }
-.classY{
-    https://upload.wikimedia.org/wikipedia/commons/2/2d/O-Jolle_insigna.png'
+.classO{
+    background-image: url("Xsign.png");
+    /* 'https://upload.wikimedia.org/wikipedia/commons/2/2d/O-Jolle_insigna.png'
 } */
