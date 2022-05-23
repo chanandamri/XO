@@ -1,9 +1,9 @@
 let boardArr = [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-],
-player = "x";
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""],
+    ],
+    player = "x";
 
 const board = document.getElementById("board");
 for (i in boardArr) {
@@ -27,6 +27,7 @@ function clicked(e) {
         player = player == "x" ? "o" : "x";
         checkRows();
         checkColummns();
+        checkSlant1();
     }
 }
 
@@ -70,7 +71,7 @@ function checkRows() {
 }
 
 function checkColummns() {
-    for (i=0; i<boardArr.length; i++) {
+    for (i = 0; i < boardArr.length; i++) {
         let check = boardArr[0][i];
         for (j = 1; j < boardArr.length; j++) {
             if (check == "") {
@@ -89,6 +90,26 @@ function checkColummns() {
             console.log("the winner is " + winner);
             break;
         }
+    }
+}
+
+function checkSlant1() {
+    let check = boardArr[0][0];
+    for (i = 1; i < boardArr.length; i++) {
+        if (check == "") {
+            win = false;
+            break;
+        } else if (boardArr[i][i] != check) {
+            win = false;
+            break;
+        } else {
+            win = true;
+            winner = check;
+        }
+        check = boardArr[i][i];
+    }
+    if (win) {
+        console.log("the winner is " + winner);
     }
 }
 
