@@ -26,6 +26,7 @@ function clicked(e) {
         addPicToCell(e.target, location);
         player = player == "x" ? "o" : "x";
         checkRows();
+        checkColummns();
     }
 }
 
@@ -48,7 +49,7 @@ function addPicToCell(cell, location) {
 function checkRows() {
     for (i in boardArr) {
         let check = boardArr[i][0];
-        for (j = 1; j < boardArr[i].length; j++) {
+        for (j = 1; j < boardArr.length; j++) {
             if (check == "") {
                 win = false;
                 break;
@@ -60,6 +61,29 @@ function checkRows() {
                 winner = check;
             }
             check = boardArr[i][j];
+        }
+        if (win) {
+            console.log("the winner is " + winner);
+            break;
+        }
+    }
+}
+
+function checkColummns() {
+    for (i=0; i<boardArr.length; i++) {
+        let check = boardArr[0][i];
+        for (j = 1; j < boardArr.length; j++) {
+            if (check == "") {
+                win = false;
+                break;
+            } else if (boardArr[j][i] != check) {
+                win = false;
+                break;
+            } else {
+                win = true;
+                winner = check;
+            }
+            check = boardArr[j][i];
         }
         if (win) {
             console.log("the winner is " + winner);
