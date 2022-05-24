@@ -1,15 +1,26 @@
-let boardArr = [
-        ["", "", ""],
-        ["", "", ""],
-        ["", "", ""],
-    ],
+let gameFinished = false
+let boardArr = [],
     player = "x";
 
-const board = document.getElementById("board");
-for (i in boardArr) {
-    for (j in boardArr[i]) {
-        board.append(creatBoard(String(i) + String(j)));
+function newGame() {
+    gameFinished = false
+    boardArr = [
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""],
+    ]
+    createBoardUI()
+
+}
+function createBoardUI() {
+    const board = document.getElementById("board");
+    board.innerHTML = ""
+    for (i in boardArr) {
+        for (j in boardArr[i]) {
+            board.append(creatBoard(String(i) + String(j)));
+        }
     }
+
 }
 
 function creatBoard(index) {
@@ -21,14 +32,16 @@ function creatBoard(index) {
 }
 
 function clicked(e) {
-    let location = getIDFromElemnt(e.target);
-    if (cellEmpty(location)) {
-        addPicToCell(e.target, location);
-        player = player == "x" ? "o" : "x";
-        checkRows();
-        checkColummns();
-        checkSlant1();
-        checkSlant2();
+    if (!gameFinished) {
+        let location = getIDFromElemnt(e.target);
+        if (cellEmpty(location)) {
+            addPicToCell(e.target, location);
+            player = player == "x" ? "o" : "x";
+            checkRows();
+            checkColummns();
+            checkSlant1();
+            checkSlant2();
+        }
     }
 }
 
@@ -66,6 +79,7 @@ function checkRows() {
         }
         if (win) {
             console.log("the winner is " + winner);
+            gameFinished = true
             break;
         }
     }
@@ -89,6 +103,8 @@ function checkColummns() {
         }
         if (win) {
             console.log("the winner is " + winner);
+            gameFinished = true
+
             break;
         }
     }
@@ -111,12 +127,14 @@ function checkSlant1() {
     }
     if (win) {
         console.log("the winner is " + winner);
+        gameFinished = true
+
     }
 }
 
 function checkSlant2() {
     let check = boardArr[0][boardArr.length - 1],
-    i=1, j=boardArr.length-2;
+        i = 1, j = boardArr.length - 2;
 
     while (i < boardArr.length) {
         if (check == "") {
@@ -135,6 +153,8 @@ function checkSlant2() {
     }
     if (win) {
         console.log("the winner is " + winner);
+        gameFinished = true
+
     }
 }
 
@@ -151,3 +171,4 @@ function checkSlant2() {
 // }
 
 // if (boardArr[0][0]==boardArr[0][1]==boardArr[0][2])
+newGame()
