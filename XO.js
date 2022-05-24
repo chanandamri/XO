@@ -28,6 +28,7 @@ function clicked(e) {
         checkRows();
         checkColummns();
         checkSlant1();
+        checkSlant2();
     }
 }
 
@@ -107,6 +108,30 @@ function checkSlant1() {
             winner = check;
         }
         check = boardArr[i][i];
+    }
+    if (win) {
+        console.log("the winner is " + winner);
+    }
+}
+
+function checkSlant2() {
+    let check = boardArr[0][boardArr.length - 1],
+    i=1, j=boardArr.length-2;
+
+    while (i < boardArr.length) {
+        if (check == "") {
+            win = false;
+            break;
+        } else if (boardArr[i][j] != check) {
+            win = false;
+            break;
+        } else {
+            win = true;
+            winner = check;
+        }
+        check = boardArr[i][j];
+        i++;
+        j--;
     }
     if (win) {
         console.log("the winner is " + winner);
