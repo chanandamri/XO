@@ -1,28 +1,81 @@
-let gameFinished = false
-let boardArr = [],
-    player = "x";
+// need to add UI representation for the following functions:
+// newGame
+// undoTurn
+// storeRecord
+// saveGame
+// loadGame
+// time (game.time parameter)
 
+
+let gameFinished = false, gameSize = 3, tempArr = [], lastRecord = gameSize * gameSize, gameTime = 0
+function saveGame() {
+    localStorage.game = JSON.stringify(game)
+}
+function loadGame() {
+    newGame()
+    game = JSON.parse(localStorage.game)
+    for (i of game.turns) {
+        addPicToCell(getElementFromID(i.location), i.location, i.player)
+    }
+}
+function deleteAll() {
+    game = {
+        turns: [],
+        boardArr: [],
+        player: "x",
+        gameFinished: false,
+        time: 0
+    }
+}
+function getElementFromID(ID) {
+    return document.getElementById(String(ID.row) + String(ID.column))
+}
+function undoTurn() {
+    if (game.turns.length > 0) {
+        game.player = game.player == "x" ? "o" : "x";
+        let lastLocation = game.turns[game.turns.length - 1].location
+        let deleteLocation = getElementFromID(lastLocation)
+        deleteLocation.classList.remove("classX", "classO")
+        game.boardArr[lastLocation.row][lastLocation.column] = "";
+        game.turns.pop()
+    }
+}
+function pushTurn(player, location) {
+    game.turns.push({
+        player,
+        location
+    })
+}
+function timer(bool) {
+    if (bool) {
+        timeClock = setInterval((() => game.time++), 1000)
+    } else {
+        clearInterval(timeClock)
+    }
+}
 function newGame() {
-    gameFinished = false
-    boardArr = [
-        ["", "", ""],
-        ["", "", ""],
-        ["", "", ""],
-    ]
-    createBoardUI()
 
+    deleteAll()
+    for (i = 0; i < gameSize; i++) {
+        tempArr = []
+        for (j = 0; j < gameSize; j++) {
+            tempArr.push("")
+        }
+        game.boardArr.push(tempArr)
+    }
+    createBoardUI()
+    timer(true)
 }
 function createBoardUI() {
     const board = document.getElementById("board");
+    board.style.gridTemplateColumns = `repeat(${gameSize}, 1fr)`
     board.innerHTML = ""
-    for (i in boardArr) {
-        for (j in boardArr[i]) {
+    for (i in game.boardArr) {
+        for (j in game.boardArr[i]) {
             board.append(creatBoard(String(i) + String(j)));
         }
     }
-
 }
-
 function creatBoard(index) {
     let elem = document.createElement(`div`);
     elem.setAttribute("id", `${index}`);
@@ -30,13 +83,28 @@ function creatBoard(index) {
     elem.addEventListener("click", clicked);
     return elem;
 }
+function storeRecord() {
+    if (game.gameFinished) {
+        if (localStorage.gameRecord) {
+            lastRecord = JSON.parse(localStorage.gameRecord)
+            lastRecord > game.turns.length ? localStorage.gameRecord = JSON.stringify(game.turns.length) : ""
+            console.log(`last record: ${lastRecord}.
+        New record ${game.turns.length}`);
+        } else {
+            localStorage.gameRecord = JSON.stringify(game.turns.length)
+            console.log(`No old record. new record:  ${game.turns.length}`);
+        }
+    }
 
+
+}
 function clicked(e) {
-    if (!gameFinished) {
+    if (!game.gameFinished) {
         let location = getIDFromElemnt(e.target);
         if (cellEmpty(location)) {
-            addPicToCell(e.target, location);
-            player = player == "x" ? "o" : "x";
+            addPicToCell(e.target, location, game.player);
+            pushTurn(game.player, location)
+            game.player = game.player == "x" ? "o" : "x";
             checkRows();
             checkColummns();
             checkSlant1();
@@ -44,131 +112,116 @@ function clicked(e) {
         }
     }
 }
-
+function winning(who) {
+    timer(false)
+    gameFinished = true
+    console.log(`The winner is: ${who}
+Total steps are: ${game.turns.length}
+Time of game is: ${game.time}`);
+}
 function getIDFromElemnt(cell) {
-    return [cell.id[0], cell.id[1]];
+    return {
+        row: cell.id[0],
+        column: cell.id[1]
+    };
 }
 function cellEmpty(location) {
-    return boardArr[location[0]][location[1]] == "";
+    return game.boardArr[location.row][location.column] == "";
 }
-function addPicToCell(cell, location) {
+function addPicToCell(cell, location, player) {
     if (player == "x") {
         cell.classList.add("classX");
-        boardArr[location[0]][location[1]] = "x";
+        game.boardArr[location.row][location.column] = "x";
     } else {
         cell.classList.add("classO");
-        boardArr[location[0]][location[1]] = "o";
+        game.boardArr[location.row][location.column] = "o";
     }
 }
-
 function checkRows() {
-    for (i in boardArr) {
-        let check = boardArr[i][0];
-        for (j = 1; j < boardArr.length; j++) {
+    for (i in game.boardArr) {
+        let check = game.boardArr[i][0];
+        for (j = 1; j < game.boardArr.length; j++) {
             if (check == "") {
                 win = false;
                 break;
-            } else if (boardArr[i][j] != check) {
+            } else if (game.boardArr[i][j] != check) {
                 win = false;
                 break;
             } else {
                 win = true;
                 winner = check;
             }
-            check = boardArr[i][j];
+            check = game.boardArr[i][j];
         }
         if (win) {
-            console.log("the winner is " + winner);
-            gameFinished = true
+            winning(winner);
             break;
         }
     }
 }
-
 function checkColummns() {
-    for (i = 0; i < boardArr.length; i++) {
-        let check = boardArr[0][i];
-        for (j = 1; j < boardArr.length; j++) {
+    for (i = 0; i < game.boardArr.length; i++) {
+        let check = game.boardArr[0][i];
+        for (j = 1; j < game.boardArr.length; j++) {
             if (check == "") {
                 win = false;
                 break;
-            } else if (boardArr[j][i] != check) {
+            } else if (game.boardArr[j][i] != check) {
                 win = false;
                 break;
             } else {
                 win = true;
                 winner = check;
             }
-            check = boardArr[j][i];
+            check = game.boardArr[j][i];
         }
         if (win) {
-            console.log("the winner is " + winner);
-            gameFinished = true
-
+            winning(winner);
             break;
         }
     }
 }
-
 function checkSlant1() {
-    let check = boardArr[0][0];
-    for (i = 1; i < boardArr.length; i++) {
+    let check = game.boardArr[0][0];
+    for (i = 1; i < game.boardArr.length; i++) {
         if (check == "") {
             win = false;
             break;
-        } else if (boardArr[i][i] != check) {
+        } else if (game.boardArr[i][i] != check) {
             win = false;
             break;
         } else {
             win = true;
             winner = check;
         }
-        check = boardArr[i][i];
+        check = game.boardArr[i][i];
     }
     if (win) {
-        console.log("the winner is " + winner);
-        gameFinished = true
+        winning(winner);
 
     }
 }
-
 function checkSlant2() {
-    let check = boardArr[0][boardArr.length - 1],
-        i = 1, j = boardArr.length - 2;
+    let check = game.boardArr[0][game.boardArr.length - 1],
+        i = 1, j = game.boardArr.length - 2;
 
-    while (i < boardArr.length) {
+    while (i < game.boardArr.length) {
         if (check == "") {
             win = false;
             break;
-        } else if (boardArr[i][j] != check) {
+        } else if (game.boardArr[i][j] != check) {
             win = false;
             break;
         } else {
             win = true;
             winner = check;
         }
-        check = boardArr[i][j];
+        check = game.boardArr[i][j];
         i++;
         j--;
     }
     if (win) {
-        console.log("the winner is " + winner);
-        gameFinished = true
-
+        winning(winner);
     }
 }
-
-// function checkWin(boardArr, player) {
-//     // debugger
-//     if (boardArr[0].every((p) => { p == (player = player == 'x' ? 'o' : 'x') })) {
-//         alert("youWin");
-//     }
-// }
-
-//     if(boardArr[0].every(p=>{console.log(p)})){
-//         alert("win")
-//     }
-// }
-
-// if (boardArr[0][0]==boardArr[0][1]==boardArr[0][2])
 newGame()
