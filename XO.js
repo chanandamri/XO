@@ -7,7 +7,28 @@
 // time (game.time parameter)
 
 
-let gameFinished = false, gameSize = 3, tempArr = [], lastRecord = gameSize * gameSize, gameTime = 0
+// let gameSize = 3, tempArr = [], lastRecord = gameSize * gameSize, gameTime = 0,
+let tempArr = [],
+    timerUI = document.getElementById("timer"),
+    gameRecordUI = document.getElementById("gameRecord")
+
+function createMenu() {
+    const menuUI = document.getElementById("menu")
+    let children = menuUI.children;
+    children[0].addEventListener('click', newGame)
+    children[1].addEventListener('click', undoTurn)
+    children[2].addEventListener('click', saveGame)
+    children[3].addEventListener('click', loadGame)
+    children[4].addEventListener('click', changeGameSize)
+}
+function changeGameSize() {
+    let tempNum = 0
+    while (tempNum % 2 == 0) {
+        tempNum = Number(prompt('Write the new size. Size must be an even number'))
+    }
+    game.gameSize = tempNum
+    newGame()
+}
 function saveGame() {
     localStorage.game = JSON.stringify(game)
 }
@@ -20,6 +41,7 @@ function loadGame() {
 }
 function deleteAll() {
     game = {
+        gameSize: 3,
         turns: [],
         boardArr: [],
         player: "x",
@@ -31,7 +53,7 @@ function getElementFromID(ID) {
     return document.getElementById(String(ID.row) + String(ID.column))
 }
 function undoTurn() {
-    if (game.turns.length > 0) {
+    if (game.turns.length > 0 && !game.gameFinished) {
         game.player = game.player == "x" ? "o" : "x";
         let lastLocation = game.turns[game.turns.length - 1].location
         let deleteLocation = getElementFromID(lastLocation)
@@ -48,7 +70,7 @@ function pushTurn(player, location) {
 }
 function timer(bool) {
     if (bool) {
-        timeClock = setInterval((() => game.time++), 1000)
+        timeClock = setInterval((() => timerUI.innerHTML = 'Timer: ' + game.time++), 1000)
     } else {
         clearInterval(timeClock)
     }
@@ -56,19 +78,19 @@ function timer(bool) {
 function newGame() {
 
     deleteAll()
-    for (i = 0; i < gameSize; i++) {
+    for (i = 0; i < game.gameSize; i++) {
         tempArr = []
-        for (j = 0; j < gameSize; j++) {
+        for (j = 0; j < game.gameSize; j++) {
             tempArr.push("")
         }
         game.boardArr.push(tempArr)
     }
     createBoardUI()
-    timer(true)
+    // timer(true)
 }
 function createBoardUI() {
     const board = document.getElementById("board");
-    board.style.gridTemplateColumns = `repeat(${gameSize}, 1fr)`
+    board.style.gridTemplateColumns = `repeat(${game.gameSize}, 1fr)`
     board.innerHTML = ""
     for (i in game.boardArr) {
         for (j in game.boardArr[i]) {
@@ -84,22 +106,22 @@ function creatBoard(index) {
     return elem;
 }
 function storeRecord() {
-    if (game.gameFinished) {
-        if (localStorage.gameRecord) {
-            lastRecord = JSON.parse(localStorage.gameRecord)
-            lastRecord > game.turns.length ? localStorage.gameRecord = JSON.stringify(game.turns.length) : ""
-            console.log(`last record: ${lastRecord}.
+    if (localStorage.gameRecord) {
+        lastRecord = JSON.parse(localStorage.gameRecord)
+        lastRecord > game.turns.length ? localStorage.gameRecord = JSON.stringify(game.turns.length) : ""
+        console.log(`last record: ${lastRecord}.
         New record ${game.turns.length}`);
-        } else {
-            localStorage.gameRecord = JSON.stringify(game.turns.length)
-            console.log(`No old record. new record:  ${game.turns.length}`);
-        }
+    } else {
+        localStorage.gameRecord = JSON.stringify(game.turns.length)
+        console.log(`No old record. new record:  ${game.turns.length}`);
     }
-
-
+    gameRecordUI.innerHTML = 'Game record: ' + JSON.parse(localStorage.gameRecord)
 }
 function clicked(e) {
     if (!game.gameFinished) {
+        if (game.turns.length == 0) {
+            timer(true)
+        }
         let location = getIDFromElemnt(e.target);
         if (cellEmpty(location)) {
             addPicToCell(e.target, location, game.player);
@@ -113,11 +135,13 @@ function clicked(e) {
     }
 }
 function winning(who) {
+
     timer(false)
-    gameFinished = true
+    game.gameFinished = true
     console.log(`The winner is: ${who}
 Total steps are: ${game.turns.length}
 Time of game is: ${game.time}`);
+    storeRecord()
 }
 function getIDFromElemnt(cell) {
     return {
@@ -225,3 +249,4 @@ function checkSlant2() {
     }
 }
 newGame()
+createMenu()
