@@ -20,6 +20,9 @@ function createMenu() {
     children[2].addEventListener('click', saveGame)
     children[3].addEventListener('click', loadGame)
     children[4].addEventListener('click', changeGameSize)
+    if (localStorage.gameRecord) {
+        gameRecordUI.innerHTML = 'Game record: ' + JSON.parse(localStorage.gameRecord)
+    }
 }
 function changeGameSize() {
     let tempNum = 0
@@ -70,7 +73,7 @@ function pushTurn(player, location) {
 }
 function timer(bool) {
     if (bool) {
-        timeClock = setInterval((() => timerUI.innerHTML = 'Timer: ' + game.time++), 1000)
+        timeClock = setInterval((() => timerUI.innerHTML = 'Timer: ' + game.time++ + ' seconds'), 1000)
     } else {
         clearInterval(timeClock)
     }
