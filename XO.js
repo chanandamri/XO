@@ -8,14 +8,14 @@
 
 
 // let gameSize = 3, tempArr = [], lastRecord = gameSize * gameSize, gameTime = 0,
-let tempArr = [],
+let tempArr = [], gamesizetemp = 3,
     timerUI = document.getElementById("timer"),
     gameRecordUI = document.getElementById("gameRecord")
 
 function createMenu() {
     const menuUI = document.getElementById("menu")
     let children = menuUI.children;
-    children[0].addEventListener('click', newGame)
+    children[0].addEventListener('click', restartGame)
     children[1].addEventListener('click', undoTurn)
     children[2].addEventListener('click', saveGame)
     children[3].addEventListener('click', loadGame)
@@ -25,11 +25,7 @@ function createMenu() {
     }
 }
 function changeGameSize() {
-    let tempNum = 0
-    while (tempNum % 2 == 0) {
-        tempNum = Number(prompt('Write the new size. Size must be an even number'))
-    }
-    game.gameSize = tempNum
+    gamesizetemp = Number(prompt('Write the new size'))
     newGame()
 }
 function saveGame() {
@@ -44,13 +40,14 @@ function loadGame() {
 }
 function deleteAll() {
     game = {
-        gameSize: 3,
+        gameSize: gamesizetemp,
         turns: [],
         boardArr: [],
         player: "x",
         gameFinished: false,
         time: 0
     }
+    console.log(game, gamesizetemp);
 }
 function getElementFromID(ID) {
     return document.getElementById(String(ID.row) + String(ID.column))
@@ -78,8 +75,12 @@ function timer(bool) {
         clearInterval(timeClock)
     }
 }
+function restartGame() {
+    timer(false)
+    timerUI.innerHTML = 'Timer: 0'
+    newGame()
+}
 function newGame() {
-
     deleteAll()
     for (i = 0; i < game.gameSize; i++) {
         tempArr = []
@@ -89,7 +90,6 @@ function newGame() {
         game.boardArr.push(tempArr)
     }
     createBoardUI()
-    // timer(true)
 }
 function createBoardUI() {
     const board = document.getElementById("board");
