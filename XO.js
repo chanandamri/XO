@@ -1,13 +1,11 @@
-// need to add UI representation for the following functions:
-// newGame
-// undoTurn
-// storeRecord
-// saveGame
-// loadGame
-// time (game.time parameter)
+const overlay = document.getElementById("overlay"),
+    popup = document.getElementById('popup'),
+    popupTitle = document.getElementById('popup-title'),
+    popupBody = document.getElementById('popupBody'),
+    closePopupButton = document.querySelectorAll('[data-close-button]')
+closePopupButton[0].addEventListener('click', closePopUp)
+overlay.addEventListener('click', closePopUp)
 
-
-// let gameSize = 3, tempArr = [], lastRecord = gameSize * gameSize, gameTime = 0,
 let tempArr = [], gamesizetemp = 3,
     timerUI = document.getElementById("timer"),
     gameRecordUI = document.getElementById("gameRecord")
@@ -29,13 +27,20 @@ function changeGameSize() {
     newGame()
 }
 function saveGame() {
+    openPopUp("Saving", "Game was saved")
     localStorage.game = JSON.stringify(game)
 }
 function loadGame() {
-    newGame()
-    game = JSON.parse(localStorage.game)
-    for (i of game.turns) {
-        addPicToCell(getElementFromID(i.location), i.location, i.player)
+
+    if (localStorage.game) {
+        gamesizetemp = JSON.parse(localStorage.game).gameSize
+        newGame()
+        game = JSON.parse(localStorage.game)
+        for (i of game.turns) {
+            addPicToCell(getElementFromID(i.location), i.location, i.player)
+        }
+    } else {
+        console.log("no game to restore");
     }
 }
 function deleteAll() {
@@ -47,7 +52,6 @@ function deleteAll() {
         gameFinished: false,
         time: 0
     }
-    console.log(game, gamesizetemp);
 }
 function getElementFromID(ID) {
     return document.getElementById(String(ID.row) + String(ID.column))
@@ -141,9 +145,9 @@ function winning(who) {
 
     timer(false)
     game.gameFinished = true
-    console.log(`The winner is: ${who}
-Total steps are: ${game.turns.length}
-Time of game is: ${game.time}`);
+    openPopUp("Game ended!", `The winner is: ${who.toUpperCase()}
+Steps played: ${game.turns.length}
+Game duration: ${game.time} second`)
     storeRecord()
 }
 function getIDFromElemnt(cell) {
@@ -250,6 +254,16 @@ function checkSlant2() {
     if (win) {
         winning(winner);
     }
+}
+function openPopUp(title, body) {
+    popupTitle.innerText = title
+    popupBody.innerText = body
+    overlay.classList.add('active')
+    popup.classList.add('active')
+}
+function closePopUp() {
+    overlay.classList.remove('active')
+    popup.classList.remove('active')
 }
 newGame()
 createMenu()
