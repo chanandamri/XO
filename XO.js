@@ -13,11 +13,11 @@ let tempArr = [], gamesizetemp = 3,
 function createMenu() {
     const menuUI = document.getElementById("menu")
     let children = menuUI.children;
-    children[0].addEventListener('click', restartGame)
-    children[1].addEventListener('click', undoTurn)
-    children[2].addEventListener('click', saveGame)
-    children[3].addEventListener('click', loadGame)
-    children[4].addEventListener('click', changeGameSize)
+    children[1].addEventListener('click', restartGame)
+    children[2].addEventListener('click', undoTurn)
+    children[3].addEventListener('click', saveGame)
+    children[4].addEventListener('click', loadGame)
+    children[5].addEventListener('click', changeGameSize)
     if (localStorage.gameRecord) {
         gameRecordUI.innerHTML = 'Game record: ' + JSON.parse(localStorage.gameRecord)
     }

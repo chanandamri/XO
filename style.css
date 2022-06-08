@@ -1,5 +1,18 @@
+body{
+    background-image: url("body.jpg");
+    background-size: contain;
+}
 h1 {
     text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h3 {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h4 {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #game {
@@ -12,16 +25,16 @@ h1 {
     grid-template-columns: repeat(4, 1fr);
     justify-content: center;
     margin: 10vh;
-    border: 5px solid black;
-    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.722);
+    border-radius: 7px;
     width: fit-content;
 }
 
 .cellClass {
-    border: 4px solid black;
+    border: 2px solid rgba(0, 0, 0, 0.614);
     width: 150px;
     height: 150px;
-    background-image: url("question.png");
+    /* background-image: url("question.png"); */
 }
 
 .classX {
@@ -42,12 +55,18 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
     transition: 200ms ease-in-out;
-    border: 1px solid black;
-    border-radius: 10px;
+    border: 1px solid goldenrod;
+    /* border-radius: 10px; */
     z-index: 10;
     background-color: white;
-    width: 500px;
+    width: 300px;
+    height: 450px;
     max-width: 80%;
+    background-image: url("winner.jpg");
+    background-size: contain;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    /* font-size: 15px; */
 
 }
 
@@ -57,16 +76,21 @@ h1 {
 }
 
 .popup-header {
-    padding: 10px 15px;
+    padding: 36px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid black;
+    /* justify-content:center */
+    
+
 }
 
 .popup-header .title {
     font-size: 1.25rem;
     font-weight: bold;
+    /* text-align: center; */
+
 }
 
 .popup-header .close-button {
@@ -80,6 +104,8 @@ h1 {
 
 .popup-body {
     padding: 10px, 15px;
+    font-weight: bold;
+    text-align: center;
 }
 
 #overlay {
@@ -97,4 +123,34 @@ h1 {
 #overlay.active {
     opacity: 0.75;
     pointer-events: all;
+}
+
+.menu-button{
+cursor: pointer;
+outline: 0;
+display: inline-block;
+font-weight: 400;
+line-height: 1.5;
+text-align: center;
+background-color: transparent;
+border: 1px solid transparent;
+padding: 6px 12px;
+font-size: 1rem;
+border-radius: .25rem;
+transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+color: #0d6efd;
+border-color: #0d6efd;
+}
+.menu-button:hover {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+#timer{
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#gameRecord{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
