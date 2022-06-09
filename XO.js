@@ -139,6 +139,7 @@ function clicked(e) {
             checkSlant1();
             checkSlant2();
             if (!game.gameFinished && game.turns.length == game.gameSize * game.gameSize) {
+                timer(false)
                 openPopUp('Draw!', 'There is no winner');
             }
         }
