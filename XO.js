@@ -138,6 +138,9 @@ function clicked(e) {
             checkColummns();
             checkSlant1();
             checkSlant2();
+            if (!game.gameFinished && game.turns.length == game.gameSize * game.gameSize) {
+                openPopUp('Draw!', 'There is no winner');
+            }
         }
     }
 }
