@@ -39,7 +39,7 @@ h4 {
 
 .classX {
     background-image: url("Xsign.png");
-    background-size: contain;
+    background-size: cover;
 }
 
 .classO {
