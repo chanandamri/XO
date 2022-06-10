@@ -7,8 +7,8 @@ closePopupButton[0].addEventListener('click', closePopUp)
 overlay.addEventListener('click', closePopUp)
 
 let tempArr = [], gamesizetemp = 3,
-    timerUI = document.getElementById("timer"),
-    gameRecordUI = document.getElementById("gameRecord")
+timerUI = document.getElementById("timer"),
+gameRecordUI = document.getElementById("gameRecord")
 
 function createMenu() {
     const menuUI = document.getElementById("menu")
@@ -31,7 +31,7 @@ function saveGame() {
     localStorage.game = JSON.stringify(game)
 }
 function loadGame() {
-
+    
     if (localStorage.game) {
         gamesizetemp = JSON.parse(localStorage.game).gameSize
         newGame()
@@ -62,6 +62,7 @@ function undoTurn() {
         let lastLocation = game.turns[game.turns.length - 1].location
         let deleteLocation = getElementFromID(lastLocation)
         deleteLocation.classList.remove("classX", "classO")
+        deleteLocation.classList.add("emptyCell")
         game.boardArr[lastLocation.row][lastLocation.column] = "";
         game.turns.pop()
     }
@@ -74,14 +75,14 @@ function pushTurn(player, location) {
 }
 function timer(bool) {
     if (bool) {
-        timeClock = setInterval((() => timerUI.innerHTML = 'Timer: ' + game.time++ + ' seconds'), 1000)
+        timeClock = setInterval((() => timerUI.innerHTML ='Timer: ' + game.time++ + ' seconds'), 1000)
     } else {
         clearInterval(timeClock)
     }
 }
 function restartGame() {
     timer(false)
-    timerUI.innerHTML = 'Timer: 0'
+    timerUI.innerHTML = 'Timer: 0 seconds'
     newGame()
 }
 function newGame() {
@@ -108,7 +109,7 @@ function createBoardUI() {
 function creatBoard(index) {
     let elem = document.createElement(`div`);
     elem.setAttribute("id", `${index}`);
-    elem.classList.add(`cellClass`);
+    elem.classList.add('cellClass','emptyCell');
     elem.addEventListener("click", clicked);
     return elem;
 }
@@ -141,18 +142,29 @@ function clicked(e) {
             if (!game.gameFinished && game.turns.length == game.gameSize * game.gameSize) {
                 timer(false)
                 openPopUp('Draw!', 'There is no winner');
+                disableEmptyClass()
             }
+            showCurrentTurn()
         }
     }
 }
-function winning(who) {
+function showCurrentTurn(){
+    if (popup.classList.value === 'popup')
+    {
+        turn= document.getElementById("turn")
+        turn.innerHTML= `Current turn: ${game.player}`
+    }
+}
 
+function winning(who) {
+    
     timer(false)
     game.gameFinished = true
     openPopUp("Game ended!", `The winner is: ${who.toUpperCase()}
-Steps played: ${game.turns.length}
-Game duration: ${game.time} second`)
+    Steps played: ${game.turns.length}
+    Game duration: ${game.time} second`)
     storeRecord()
+    disableEmptyClass()
 }
 function getIDFromElemnt(cell) {
     return {
@@ -164,6 +176,7 @@ function cellEmpty(location) {
     return game.boardArr[location.row][location.column] == "";
 }
 function addPicToCell(cell, location, player) {
+    cell.classList.remove("emptyCell");
     if (player == "x") {
         cell.classList.add("classX");
         game.boardArr[location.row][location.column] = "x";
@@ -233,21 +246,21 @@ function checkSlant1() {
     }
     if (win) {
         winning(winner);
-
+        
     }
 }
 function checkSlant2() {
     let check = game.boardArr[0][game.boardArr.length - 1],
         i = 1, j = game.boardArr.length - 2;
-
-    while (i < game.boardArr.length) {
-        if (check == "") {
-            win = false;
-            break;
-        } else if (game.boardArr[i][j] != check) {
-            win = false;
-            break;
-        } else {
+        
+        while (i < game.boardArr.length) {
+            if (check == "") {
+                win = false;
+                break;
+            } else if (game.boardArr[i][j] != check) {
+                win = false;
+                break;
+            } else {
             win = true;
             winner = check;
         }
@@ -269,5 +282,11 @@ function closePopUp() {
     overlay.classList.remove('active')
     popup.classList.remove('active')
 }
+
+function disableEmptyClass(){
+    let cells= document.getElementById("board").children
+    Array(...cells).forEach(v=>v.classList.remove("emptyCell"))
+}
+
 newGame()
 createMenu()

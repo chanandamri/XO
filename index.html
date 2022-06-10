@@ -1,43 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
-  </head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Tic Tac Toe</title>
+    </head>
 
-  <body>
-    <h1>Tic Tac Toe</h1>
-    <div id="game">
-      <div>
-        <ul id="menu">
-          <h3>Game Options:</h3>
-          <li><button class="menu-button" id="newGame">New Game</button></li>
-          <li><button class="menu-button" id="undo">Undo last move</button></li>
-          <li><button class="menu-button" id="saveGame">Save game</button></li>
-          <li><button class="menu-button" id="loadGame">Load game</button></li>
-          <li>
-            <button class="menu-button" id="changeSize">
-              change game size
-            </button>
-          </li>
-        </ul>
-
-        <div id="timer"><h4>Timer: 0 seconds</h4></div>
-        <div id="gameRecord"><h4>Game record:</h4></div>
-      </div>
-      <div id="board"></div>
-    </div>
-    <div id="popup" class="popup">
-      <div class="popup-header">
-        <div id="popup-title" class="title">title</div>
-        <button data-close-button class="close-button">&times;</button>
-      </div>
-      <div id="popupBody" class="popup-body">body</div>
-    </div>
-    <div id="overlay"></div>
-    <script src="XO.js"></script>
-  </body>
+    <body>
+        <h1>Tic Tac Toe</h1>
+        <div id="game">
+            <div>
+                <ul id="menu">
+                    <h3>Game Options:</h3>
+                    <li>
+                        <button class="menu-button" id="newGame">
+                            New Game
+                        </button>
+                    </li>
+                    <li>
+                        <button class="menu-button" id="undo">
+                            Undo last move
+                        </button>
+                    </li>
+                    <li>
+                        <button class="menu-button" id="saveGame">
+                            Save game
+                        </button>
+                    </li>
+                    <li>
+                        <button class="menu-button" id="loadGame">
+                            Load game
+                        </button>
+                    </li>
+                    <li>
+                        <button class="menu-button" id="changeSize">
+                            change game size
+                        </button>
+                    </li>
+                </ul>
+                <div id="stats">
+                    <h4 id="turn">Current turn: x</h4>
+                    <h4 id="timer">Timer: 0 seconds</h4>
+                    <h4 id="gameRecord">Game record:</h4>
+                </div>
+            </div>
+            <div id="board"></div>
+        </div>
+        <div id="popup" class="popup">
+            <div class="popup-header">
+                <div id="popup-title" class="title">title</div>
+                <button data-close-button class="close-button">&times;</button>
+            </div>
+            <div id="popupBody" class="popup-body">body</div>
+        </div>
+        <div id="overlay"></div>
+        <script src="XO.js"></script>
+    </body>
 </html>
