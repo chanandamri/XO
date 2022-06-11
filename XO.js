@@ -7,8 +7,7 @@ closePopupButton[0].addEventListener('click', closePopUp)
 overlay.addEventListener('click', closePopUp)
 
 let tempArr = [], gamesizetemp = 3,
-timerUI = document.getElementById("timer"),
-gameRecordUI = document.getElementById("gameRecord")
+timerUI = document.getElementById("timer");
 
 function createMenu() {
     const menuUI = document.getElementById("menu")
@@ -18,9 +17,6 @@ function createMenu() {
     children[3].addEventListener('click', saveGame)
     children[4].addEventListener('click', loadGame)
     children[5].addEventListener('click', changeGameSize)
-    if (localStorage.gameRecord) {
-        gameRecordUI.innerHTML = 'Game record: ' + JSON.parse(localStorage.gameRecord)
-    }
 }
 function changeGameSize() {
     gamesizetemp = Number(prompt('Write the new size'))
@@ -95,6 +91,7 @@ function newGame() {
         game.boardArr.push(tempArr)
     }
     createBoardUI()
+    showRecord()
 }
 function createBoardUI() {
     const board = document.getElementById("board");
@@ -113,17 +110,48 @@ function creatBoard(index) {
     elem.addEventListener("click", clicked);
     return elem;
 }
-function storeRecord() {
-    if (localStorage.gameRecord) {
-        lastRecord = JSON.parse(localStorage.gameRecord)
-        lastRecord > game.turns.length ? localStorage.gameRecord = JSON.stringify(game.turns.length) : ""
-        console.log(`last record: ${lastRecord}.
-        New record ${game.turns.length}`);
-    } else {
-        localStorage.gameRecord = JSON.stringify(game.turns.length)
-        console.log(`No old record. new record:  ${game.turns.length}`);
+function showRecord(){
+    if (localStorage.gameRecord){
+        gameRecordUI = document.getElementById("gameRecord");
+        if(JSON.parse(localStorage.getItem("gameRecord"))[game.gameSize]){
+            gameRecordUI.innerHTML = `${game.gameSize} Size record: ` + JSON.parse(localStorage.getItem("gameRecord"))[game.gameSize]
+        }
+        else{
+            gameRecordUI.innerHTML = `${game.gameSize} Size record: No record`
+        }
     }
-    gameRecordUI.innerHTML = 'Game record: ' + JSON.parse(localStorage.gameRecord)
+}
+function storeRecord() {
+    let currentScore = game.turns.length;
+    let allRecords= JSON.parse(localStorage.getItem("gameRecord"));
+    if (allRecords) {
+        if(allRecords[game.gameSize]){
+            let thisSizeRecord = allRecords[game.gameSize]
+            if(thisSizeRecord > currentScore){
+                allRecords[game.gameSize] = currentScore;
+                localStorage.setItem("gameRecord",JSON.stringify(allRecords));
+                showRecord()
+                return (`last record: ${thisSizeRecord}
+                New record ${currentScore} !`);
+            }
+        }
+        else {
+            allRecords[game.gameSize] = currentScore;
+            localStorage.setItem("gameRecord",JSON.stringify(allRecords));
+            showRecord()
+            return (`No old record
+            new record:  ${currentScore} !`);
+        }
+    }
+    else {
+        let obj={}
+        let size= game.gameSize
+        obj[size]= currentScore;
+        localStorage.setItem("gameRecord",JSON.stringify(obj))
+        showRecord()
+        return (`No old record
+        new record:  ${currentScore} !`);
+    }
 }
 function clicked(e) {
     if (!game.gameFinished) {
@@ -152,7 +180,7 @@ function showCurrentTurn(){
     if (popup.classList.value === 'popup')
     {
         turn= document.getElementById("turn")
-        turn.innerHTML= `Current turn: ${game.player}`
+        turn.innerHTML= `Current turn: ${game.player.toUpperCase()}`
     }
 }
 
@@ -162,8 +190,8 @@ function winning(who) {
     game.gameFinished = true
     openPopUp("Game ended!", `The winner is: ${who.toUpperCase()}
     Steps played: ${game.turns.length}
-    Game duration: ${game.time} second`)
-    storeRecord()
+    Game duration: ${game.time} second
+    ${storeRecord()||''}`)
     disableEmptyClass()
 }
 function getIDFromElemnt(cell) {
