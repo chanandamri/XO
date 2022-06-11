@@ -36,7 +36,7 @@ function loadGame() {
             addPicToCell(getElementFromID(i.location), i.location, i.player)
         }
     } else {
-        console.log("no game to restore");
+        openPopUp("Loading","no game to restore");
     }
 }
 function deleteAll() {
@@ -169,7 +169,9 @@ function clicked(e) {
             checkSlant2();
             if (!game.gameFinished && game.turns.length == game.gameSize * game.gameSize) {
                 timer(false)
-                openPopUp('Draw!', 'There is no winner');
+                openPopUp('Draw!', `There is no winner
+                Steps played: ${game.turns.length}
+                Game duration: ${game.time} second`);
                 disableEmptyClass()
             }
             showCurrentTurn()
